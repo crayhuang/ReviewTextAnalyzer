@@ -37,6 +37,7 @@ def submit_input_file(button):
     analyzer.set_input_file_path(filename_var.get())
     analyzer.analyze()
     analyzer.output()
+    button.config(state='normal')
 
 sub_panel0 = Tk.Frame(root, border=4)
 sub_panel0.pack(side='top', anchor='w')

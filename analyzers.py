@@ -6,23 +6,34 @@ __author__ = 'Jeff'
 import xlrd
 import csv
 import re
+import time
 
-#Personal Care
-personal_care_keywords_path = "/Users/cray/Downloads/Comments/V2/keyword20160407 V1.1.xlsx"
-personal_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/PERSONAL CARE.txt'
-appliances_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/APPLIANCES.txt'
-baby_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/APPLIANCES.txt'
-fabric_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/FABRIC CARE.txt'
-feminine_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/FEMININE CARE.txt'
-hair_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/HAIR CARE.txt'
-oral_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/ORAL CARE.txt'
-prestige_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/PRESTIGE.txt'
-shave_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/SHAVE CARE.txt'
-skin_care_bad_words_path = '/Users/cray/Downloads/Comments/V2/坏词词库/SKIN CAREtxt'
+appliances_bad_words_path = './BadWordFiles/APPLIANCES.txt'
+baby_care_bad_words_path = './BadWordFiles/APPLIANCES.txt'
+fabric_care_bad_words_path = './BadWordFiles/FABRIC CARE.txt'
+feminine_care_bad_words_path = './BadWordFiles/FEMININE CARE.txt'
+hair_care_bad_words_path = './BadWordFiles/HAIR CARE.txt'
+oral_care_bad_words_path = './BadWordFiles/ORAL CARE.txt'
+personal_care_bad_words_path = './BadWordFiles/PERSONAL CARE.txt'
+prestige_bad_words_path = './BadWordFiles/PRESTIGE.txt'
+shave_care_bad_words_path = './BadWordFiles/SHAVE CARE.txt'
+skin_care_bad_words_path = './BadWordFiles/SKIN CARE.txt'
 
 
-sentence_cutting_path = '/Users/cray/Downloads/Comments/V2/sentence_cutting.txt'
-mean_conversions_path = '/Users/cray/Downloads/Comments/V2/mean_conversion.txt'
+appliances_keywords_path = "./KeywordFiles/APPLIANCES.xlsx"
+baby_care_keywords_path = "./KeywordFiles/Baby Care.xlsx"
+fabric_care_keywords_path = "./KeywordFiles/fabric care.xlsx"
+feminine_care_keywords_path = "./KeywordFiles/Femine Care.xlsx"
+hair_care_keywords_path = "./KeywordFiles/HAIR CARE.xlsx"
+oral_care_keywords_path = "./KeywordFiles/ORAL CARE.xlsx"
+personal_care_keywords_path = "./KeywordFiles/PERSONAL CARE.xlsx"
+prestige_keywords_path = "./KeywordFiles/PRESTIGE.xlsx"
+shave_care_keywords_path = "./KeywordFiles/SHAVE CARE.xlsx"
+skin_care_keywords_path = "./KeywordFiles/SKIN CARE.xlsx"
+
+
+sentence_cutting_path = 'sentence_cutting.txt'
+mean_conversions_path = 'mean_conversion.txt'
 
 
 re_pattern = "\,|，|\.|。|\!|！|\?|？|\；|;|\=|：|\ |、| "
@@ -32,7 +43,7 @@ class ReviewTextAnalyzer:
     def __init__(self):
         self.category = None
         self.input_file_path = ''
-        self.output_file_path = '/Users/cray/Downloads/Comments/V2/output_with_ui.csv'
+        self.output_file_path = './OutputFiles/'
         self.bad_word_path = ''
         self.keyword_path = ''
         self.keywords_sheet = None
@@ -143,6 +154,9 @@ class ReviewTextAnalyzer:
                             self.results.append(clone_row)
 
     def output(self):
+        self.output_file_path += self.category
+        self.output_file_path += '_'
+        self.output_file_path += str(time.strftime('%Y%m%d-%H%M%S'))
         self.header = ['brand', 'category', 'is_competitor', 'manufacturer', 'market', 'matched_keywords', 'online_store',
                        'product_description', 'report_date', 'retailer_product_code', 'review_date', 'review_rating',
                        'review_text', 'review_title', 'sub_category', 'time_of_publication', 'upc', 'url', 'unique_ID',
@@ -159,37 +173,37 @@ class ReviewTextAnalyzer:
         self.bad_word_path = personal_care_bad_words_path
 
     def init_appliances(self):
-        self.keyword_path = ''
+        self.keyword_path = appliances_keywords_path
         self.bad_word_path = appliances_bad_words_path
 
     def init_baby_care(self):
-        self.keyword_path = ''
+        self.keyword_path = baby_care_keywords_path
         self.bad_word_path = baby_care_bad_words_path
 
     def init_fabric_care(self):
-        self.keyword_path = ''
+        self.keyword_path = fabric_care_keywords_path
         self.bad_word_path = fabric_care_bad_words_path
 
     def init_feminine_care(self):
-        self.keyword_path = ''
+        self.keyword_path = feminine_care_keywords_path
         self.bad_word_path = feminine_care_bad_words_path
 
     def init_hair_care(self):
-        self.keyword_path = ''
+        self.keyword_path = hair_care_keywords_path
         self.bad_word_path = hair_care_bad_words_path
 
     def init_oral_care(self):
-        self.keyword_path = ''
+        self.keyword_path = oral_care_keywords_path
         self.bad_word_path = oral_care_bad_words_path
 
     def init_prestige(self):
-        self.keyword_path = ''
+        self.keyword_path = prestige_keywords_path
         self.bad_word_path = prestige_bad_words_path
 
     def init_shave_care(self):
-        self.keyword_path = ''
+        self.keyword_path = shave_care_keywords_path
         self.bad_word_path = shave_care_bad_words_path
 
     def init_skin_care(self):
-        self.keyword_path = ''
+        self.keyword_path = skin_care_keywords_path
         self.bad_word_path = skin_care_bad_words_path
