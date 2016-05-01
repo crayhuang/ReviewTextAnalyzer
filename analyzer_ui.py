@@ -29,15 +29,18 @@ def open_file_dialog():
 
 
 def submit_input_file(button):
-    button.config(state='disabled')
-    analyzer = ReviewTextAnalyzer()
-    #Init category
-    analyzer.init_category(category_var.get())
-    #Init input file path
-    analyzer.set_input_file_path(filename_var.get())
-    analyzer.analyze()
-    analyzer.output()
-    button.config(state='normal')
+    try:
+        button.config(state='disabled')
+        analyzer = ReviewTextAnalyzer()
+        #Init category
+        analyzer.init_category(category_var.get())
+        #Init input file path
+        analyzer.set_input_file_path(filename_var.get())
+        analyzer.analyze()
+        analyzer.output()
+        button.config(state='normal')
+    except Exception:
+        button.config(state='normal')
 
 sub_panel0 = Tk.Frame(root, border=4)
 sub_panel0.pack(side='top', anchor='w')
