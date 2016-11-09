@@ -61,7 +61,7 @@ Tk.Button(sub_panel0, text='Browse', command=open_file_dialog).pack(side='left')
 
 Tk.Label(sub_panel1, text='Category:  ').pack(side='left')
 category_values = ['PERSONAL_CARE', 'BABY_CARE', 'HAIR_CARE', 'ORAL_CARE', 'FABRIC_CARE', 'FEMININE_CARE',
-                   'APPLICANCES', 'PRESTIGE', 'SHAVE_ARE', 'SKIN_CARE']
+                   'APPLIANCES', 'PRESTIGE', 'SHAVE_CARE', 'SKIN_CARE', 'AIR_CARE']
 category = ttk.Combobox(sub_panel1, textvariable=category_var, values=category_values).pack(side='left')
 
 #Sub panel1 components

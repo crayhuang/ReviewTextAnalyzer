@@ -9,6 +9,7 @@ import re
 import time
 import datetime
 import sys
+import os
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -24,6 +25,7 @@ personal_care_bad_words_path = './BadWordFiles/PERSONAL CARE.txt'
 prestige_bad_words_path = './BadWordFiles/PRESTIGE.txt'
 shave_care_bad_words_path = './BadWordFiles/SHAVE CARE.txt'
 skin_care_bad_words_path = './BadWordFiles/SKIN CARE.txt'
+air_care_bad_words_path = './BadWordFiles/AIR CARE.txt'
 
 # Keyword files path
 appliances_keywords_path = "./KeywordFiles/APPLIANCES.xlsx"
@@ -36,6 +38,7 @@ personal_care_keywords_path = "./KeywordFiles/PERSONAL CARE.xlsx"
 prestige_keywords_path = "./KeywordFiles/PRESTIGE.xlsx"
 shave_care_keywords_path = "./KeywordFiles/SHAVE CARE.xlsx"
 skin_care_keywords_path = "./KeywordFiles/SKIN CARE.xlsx"
+air_care_keywords_path = "./KeywordFiles/AIR CARE.xlsx"
 
 # Exceptional files path
 appliances_exceptional_word_path = './ExceptionalWordFiles/APPLIANCES.txt'
@@ -48,12 +51,13 @@ personal_care_exceptional_word_path = './ExceptionalWordFiles/PERSONAL CARE.txt'
 prestige_exceptional_word_path = './ExceptionalWordFiles/PRESTIGE.txt'
 shave_care_exceptional_word_path = './ExceptionalWordFiles/SHAVE CARE.txt'
 skin_care_exceptional_word_path = './ExceptionalWordFiles/SKIN CARE.txt'
+air_care_exceptional_word_path = './ExceptionalWordFiles/AIR CARE.txt'
 
 sentence_cutting_path = 'sentence_cutting.txt'
 mean_conversions_path = 'mean_conversion.txt'
 
 
-re_pattern = "\,|，|\.|。|\!|！|\?|？|\；|;|\=|：|\ |、| "
+re_pattern = "\,|，|\.|。|\!|！|\?|？|\；|;|\=|：|\ |、|\~|\……|\--| "
 
 
 class ReviewTextAnalyzer:
@@ -96,6 +100,8 @@ class ReviewTextAnalyzer:
             self.init_shave_care()
         if 'SKIN_CARE' == self.category:
             self.init_skin_care()
+        if 'AIR_CARE' == self.category:
+            self.init_air_care()
 
     def set_input_file_path(self, input_file_path):
         self.input_file_path = input_file_path
@@ -138,8 +144,13 @@ class ReviewTextAnalyzer:
 
         print self.input_file_path
         i = 0
+        file_path_without_ext = os.path.splitext(self.input_file_path)[0]
+        file_path_parts = os.path.split(file_path_without_ext)
+        self.output_file_path += file_path_parts[-1]
+        print self.output_file_path
         with open(self.input_file_path, 'rU') as input_file:
-            input_reader = csv.reader(input_file, dialect=csv.excel_tab, delimiter=',')
+            input_reader = csv.reader((line.replace('\0', '') for line in input_file), dialect=csv.excel_tab,
+                                      delimiter=',')
             input_col_len = len(input_reader.next())
             for row in input_reader:
                 review_text = row[12]
@@ -154,11 +165,17 @@ class ReviewTextAnalyzer:
                         handling_text = handling_text.replace(cuttings, '*')
 
                 split_texts = re.split(re_pattern, handling_text)
+                has_kw = False
+                existing_review_subtype_array = []
                 for sub_text in split_texts:
                     keywords_len = self.keywords_sheet.nrows - 1
                     current_row = -1
                     for kw in self.keywords_sheet.col_values(4):
                         current_row += 1
+                        review_type = self.keywords_sheet.cell_value(current_row, 2).encode('utf-8')
+                        review_subtype = self.keywords_sheet.cell_value(current_row, 3).encode('utf-8')
+                        if review_subtype in existing_review_subtype_array:
+                            continue
                         if isinstance(kw, float):
                             kw = str(kw)
                         kw = kw.encode('utf-8')
@@ -180,25 +197,33 @@ class ReviewTextAnalyzer:
                                                 score = '5'
                                                 break
                             clone_row = row[:]
-                            clone_row.append(self.keywords_sheet.cell_value(current_row, 2).encode('utf-8'))
-                            clone_row.append(self.keywords_sheet.cell_value(current_row, 3).encode('utf-8'))
-                            clone_row.append(score)
-                            clone_row.append(sub_text)
-                            clone_row.append(kw)
-                            clone_row.append(bw)
+                            clone_row.append(review_type)
+                            clone_row.append(review_subtype)
+                            existing_review_subtype_array.append(review_subtype)
+                            # clone_row.append(sub_text)
+                            # # clone_row.append(kw)
+                            # clone_row.append(bw)
+                            clone_row[5] = kw
+                            clone_row[11] = score
+                            has_kw = True
                             self.results.append(clone_row)
+                if not has_kw:
+                    clone_row = row[:]
+                    clone_row.append('others')
+                    clone_row.append('others')
+                    self.results.append(clone_row)
 
     def output(self):
-        self.output_file_path += self.category
+        # self.output_file_path += self.category
         self.output_file_path += '_'
         self.output_file_path += str(time.strftime('%Y%m%d-%H%M%S'))
         self.output_file_path += '.csv'
         self.header = ['brand', 'category', 'is_competitor', 'manufacturer', 'market', 'matched_keywords', 'online_store',
                        'product_description', 'report_date', 'retailer_product_code', 'review_date', 'review_rating',
                        'review_text', 'review_title', 'sub_category', 'time_of_publication', 'upc', 'url', 'unique_ID',
-                       'review type', 'review subtype', 'review rating', 'sub_text', 'keyword', 'bad word']
+                       'review type', 'review subtype']
         with open(self.output_file_path, 'wb') as output_file:
-            output_writer = csv.writer(output_file, delimiter=",", quotechar="'", quoting=csv.QUOTE_MINIMAL)
+            output_writer = csv.writer(output_file, delimiter=",", quotechar='"', quoting=csv.QUOTE_ALL)
             output_writer.writerow(self.header)
             for rs in self.results:
                 output_writer.writerow(rs)
@@ -256,3 +281,8 @@ class ReviewTextAnalyzer:
         self.keyword_path = skin_care_keywords_path
         self.bad_word_path = skin_care_bad_words_path
         self.exceptional_path = skin_care_exceptional_word_path
+
+    def init_air_care(self):
+        self.keyword_path = air_care_keywords_path
+        self.bad_word_path = air_care_bad_words_path
+        self.exceptional_path = air_care_exceptional_word_path

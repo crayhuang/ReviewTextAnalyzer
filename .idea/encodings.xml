@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/BadWordFiles/APPLIANCES.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/BABY CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/FABRIC CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/FEMININE CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/HAIR CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/ORAL CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/PERSONAL CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/PRESTIGE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/SHAVE CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/BadWordFiles/SKIN CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/APPLIANCES.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/BABY CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/FABRIC CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/FEMININE CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/HAIR CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/ORAL CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/PERSONAL CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/PRESTIGE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/SHAVE CARE.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ExceptionalWordFiles/SKIN CARE.txt" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
